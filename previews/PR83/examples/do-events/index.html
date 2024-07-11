@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Dansgaard-Oescher events and Critical Slowing Down · TransitionsInTimeseries.jl</title><meta name="title" content="Dansgaard-Oescher events and Critical Slowing Down · TransitionsInTimeseries.jl"/><meta property="og:title" content="Dansgaard-Oescher events and Critical Slowing Down · TransitionsInTimeseries.jl"/><meta property="twitter:title" content="Dansgaard-Oescher events and Critical Slowing Down · TransitionsInTimeseries.jl"/><meta name="description" content="Documentation for TransitionsInTimeseries.jl."/><meta property="og:description" content="Documentation for TransitionsInTimeseries.jl."/><meta property="twitter:description" content="Documentation for TransitionsInTimeseries.jl."/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="https://fonts.googleapis.com/css?family=Montserrat|Source+Code+Pro&amp;display=swap" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">TransitionsInTimeseries.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">TransitionsInTimeseries.jl</a></li><li><a class="tocitem" href="../../tutorial/">Tutorial</a></li><li><span class="tocitem">Examples</span><ul><li><a class="tocitem" href="../logistic/">Permutation entropy for dynamic regime changes</a></li><li><a class="tocitem" href="../ks_paleojump/">Kolmogorov-Smirnov test for detecting transitions in paleoclimate timeseries</a></li><li class="is-active"><a class="tocitem" href>Dansgaard-Oescher events and Critical Slowing Down</a><ul class="internal"><li><a class="tocitem" href="#Preprocessing-NGRIP"><span>Preprocessing NGRIP</span></a></li><li><a class="tocitem" href="#Hindcast-on-NGRIP-data"><span>Hindcast on NGRIP data</span></a></li><li><a class="tocitem" href="#CSD:-only-a-necessary-condition,-only-in-some-cases"><span>CSD: only a necessary condition, only in some cases</span></a></li><li><a class="tocitem" href="#Hindcasting-simulated-DO-events"><span>Hindcasting simulated DO-events</span></a></li></ul></li></ul></li><li><a class="tocitem" href="../../api/">API</a></li><li><a class="tocitem" href="../../refs/">References</a></li><li><a class="tocitem" href="../../devdocs/">Developer&#39;s documentation</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Examples</a></li><li class="is-active"><a href>Dansgaard-Oescher events and Critical Slowing Down</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Dansgaard-Oescher events and Critical Slowing Down</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/JuliaDynamics/TransitionsInTimeseries.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/JuliaDynamics/TransitionsInTimeseries.jl/blob/main/docs/src/examples/do-events.jl" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Dansgaard-Oescher-events-and-Critical-Slowing-Down"><a class="docs-heading-anchor" href="#Dansgaard-Oescher-events-and-Critical-Slowing-Down">Dansgaard-Oescher events and Critical Slowing Down</a><a id="Dansgaard-Oescher-events-and-Critical-Slowing-Down-1"></a><a class="docs-heading-anchor-permalink" href="#Dansgaard-Oescher-events-and-Critical-Slowing-Down" title="Permalink"></a></h1><p>The <span>$\delta^{18}O$</span> timeseries of the North Greenland Ice Core Project (<a href="https://en.wikipedia.org/wiki/North_Greenland_Ice_Core_Project">NGRIP</a>) are, to this date, the best proxy record for the Dansgaard-Oeschger events (<a href="https://en.wikipedia.org/wiki/Dansgaard%E2%80%93Oeschger_event">DO-events</a>). DO-events are sudden warming episodes of the North Atlantic, reaching 10 degrees of regional warming within 100 years. They happened quasi-periodically over the last glacial cycle due to transitions between strong and weak states of the Atlantic Meridional Overturning Circulation and might be therefore be the most prominent examples of abrupt transitions in the field of climate science. We here propose to hindcast these events by applying the theory of Critical Slowing Down (CSD) on the NGRIP data, which can be found <a href="https://www.iceandclimate.nbi.ku.dk/data/">here</a> in its raw format. This analysis has already been done in (<a href="../../refs/#boers-early-warning-2018">Boers, 2018</a>) and we here try to reproduce Figure 2.d-f.</p><h2 id="Preprocessing-NGRIP"><a class="docs-heading-anchor" href="#Preprocessing-NGRIP">Preprocessing NGRIP</a><a id="Preprocessing-NGRIP-1"></a><a class="docs-heading-anchor-permalink" href="#Preprocessing-NGRIP" title="Permalink"></a></h2><p>Data pre-processing is not part of TransitionsInTimeseries.jl, but a step the user has to do before using the package. To present an example with a complete scientific workflow, we will showcase typical data pre-processing here, that consist of the following steps:</p><ol><li>Load the data, reverse and offset it to have time vector = time before 2000 AD.</li><li>Filter non-unique points in time and sort the data.</li><li>Regrid the data from uneven to even sampling.</li></ol><p>The time and <span>$\delta^{18}O$</span> vectors resulting from the <span>$i$</span>-th preprocessing step are respectively called <span>$t_i$</span> and <span>$x_i$</span>. The final step consists in obtaining a residual <span>$r$</span>, i.e. the fluctuations of the system around the attractor, which, within the CSD theory, is assumed to be tracked. Over this example, it will appear that the convenience of TransitionsInTimeseries.jl leads the bulk of the code to be written for plotting and preprocessing.</p><h3 id="Step-1:"><a class="docs-heading-anchor" href="#Step-1:">Step 1:</a><a id="Step-1:-1"></a><a class="docs-heading-anchor-permalink" href="#Step-1:" title="Permalink"></a></h3><pre><code class="language-julia hljs">using DelimitedFiles, Downloads
+
+function load_ngrip()
+    tmp = Base.download(&quot;https://raw.githubusercontent.com/JuliaDynamics/JuliaDynamics/&quot;*
+        &quot;master/timeseries/NGRIP.csv&quot;)
+    data, labels = readdlm(tmp, header = true)
+    return reverse(data[:, 1]) .- 2000, reverse(data[:, 2]) # (time, delta-18-0) vectors
+end
+
+t1, x1 = load_ngrip()</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">([-59944.5, -59939.6, -59935.9, -59930.5, -59925.0, -59919.0, -59914.3, -59909.4, -59904.5, -59899.7  …  -27.40000000000009, -27.40000000000009, -27.299999999999955, -27.299999999999955, -27.200000000000045, -27.09999999999991, -27.09999999999991, -27.0, -26.90000000000009, -26.799999999999955], [-43.52, -42.94, -42.13, -40.04, -41.09, -43.57, -42.28, -41.2, -44.07, -44.53  …  -35.29, -35.18, -35.51, -36.03, -36.52, -37.12, -37.41, -37.21, -36.62, -35.52])</code></pre><h3 id="Step-2"><a class="docs-heading-anchor" href="#Step-2">Step 2</a><a id="Step-2-1"></a><a class="docs-heading-anchor-permalink" href="#Step-2" title="Permalink"></a></h3><pre><code class="language-julia hljs">uniqueidx(v) = unique(i -&gt; v[i], eachindex(v))
+function keep_unique(t, x)
+    unique_idx = uniqueidx(t)
+    return t[unique_idx], x[unique_idx]
+end
+
+function sort_timeseries!(t, x)
+    p = sortperm(t)
+    permute!(t, p)
+    permute!(x, p)
+    return nothing
+end
+
+t2, x2 = keep_unique(t1, x1)
+sort_timeseries!(t2, x2)</code></pre><h3 id="Step-3"><a class="docs-heading-anchor" href="#Step-3">Step 3</a><a id="Step-3-1"></a><a class="docs-heading-anchor-permalink" href="#Step-3" title="Permalink"></a></h3><pre><code class="language-julia hljs">using BSplineKit
+
+function regrid2evensampling(t, x, dt)
+    itp = BSplineKit.interpolate(t, x, BSplineOrder(4))
+    tspan = (ceil(minimum(t)), floor(maximum(t)))
+    t_even = collect(tspan[1]:dt:tspan[2])
+    x_even = itp.(t_even)
+    return t_even, x_even
+end
+
+dt = 5.0        # dt = 5 yr as in (Boers 2018)
+t3, x3 = regrid2evensampling(t2, x2, dt)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">([-59944.0, -59939.0, -59934.0, -59929.0, -59924.0, -59919.0, -59914.0, -59909.0, -59904.0, -59899.0  …  -74.0, -69.0, -64.0, -59.0, -54.0, -49.0, -44.0, -39.0, -34.0, -29.0], [-43.445268010797946, -42.85408835164853, -41.357360665158936, -39.9365468206892, -41.60554051352076, -43.57000000000001, -42.145558689100454, -41.33160823883399, -44.273597725729985, -44.4622612304012  …  -35.12, -36.190000000000005, -35.14, -37.06, -34.93, -34.23, -33.53, -35.09, -34.00000000000001, -34.46])</code></pre><h3 id="Step-4"><a class="docs-heading-anchor" href="#Step-4">Step 4</a><a id="Step-4-1"></a><a class="docs-heading-anchor-permalink" href="#Step-4" title="Permalink"></a></h3><p>For the final step we drop the indices:</p><pre><code class="language-julia hljs">using DSP
+
+function chebyshev_filter(t, x, fcutoff)
+    ii = 10             # Chebyshev filtering requires to prune first points of timeseries.
+    responsetype = Highpass(fcutoff, fs = 1/dt)
+    designmethod = Chebyshev1(8, 0.05)
+    r = filt(digitalfilter(responsetype, designmethod), x)
+    xtrend = x - r
+    return t[ii:end], x[ii:end], xtrend[ii:end], r[ii:end]
+end
+
+fcutoff = 0.95 * 0.01   # cutoff ≃ 0.01 yr^-1 as in (Boers 2018)
+t, x, xtrend, r = chebyshev_filter(t3, x3, fcutoff)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">([-59899.0, -59894.0, -59889.0, -59884.0, -59879.0, -59874.0, -59869.0, -59864.0, -59859.0, -59854.0  …  -74.0, -69.0, -64.0, -59.0, -54.0, -49.0, -44.0, -39.0, -34.0, -29.0], [-44.4622612304012, -44.264401428210874, -44.02956767939856, -42.29334237357212, -42.594341674200344, -41.09704877854712, -40.39837540966913, -44.369155046413255, -42.74492506508012, -43.737014520530145  …  -35.12, -36.190000000000005, -35.14, -37.06, -34.93, -34.23, -33.53, -35.09, -34.00000000000001, -34.46], [-43.89287787976461, -48.663435112414156, -51.31169981050155, -51.269094666491796, -49.90310432724566, -47.721430022512344, -44.36050569418247, -43.87556827410048, -43.57802291229893, -41.36870967826094  …  -34.81349114528442, -36.01634453179986, -36.150446802907226, -36.37595639697143, -35.96843653265903, -33.899634243732976, -32.49784036951535, -33.06575312724142, -34.07956188682297, -34.4079080530096], [-0.5693833506365866, 4.399033684203284, 7.282132131102991, 8.975752292919669, 7.308762653045311, 6.624381243965224, 3.9621302845133433, -0.493586772312777, 0.8330978472188112, -2.368304842269206  …  -0.30650885471557926, -0.17365546820014846, 1.0104468029072273, -0.684043603028572, 1.0384365326590237, -0.3303657562670192, -1.0321596304846505, -2.0242468727585807, 0.07956188682296689, -0.05209194699039831])</code></pre><p>Let&#39;s now visualize our data in what will become our main figure. For the segmentation of the DO-events, we rely on the tabulated data from (<a href="../../refs/#rasmussen-stratigraphic-2014">Rasmussen <em>et al.</em>, 2014</a>) (which will soon be available as downloadable):</p><pre><code class="language-julia hljs">using CairoMakie, Loess
+
+function loess_filter(t, x; span = 0.005)
+    loessmodel = loess(t, x, span = span)
+    xtrend = Loess.predict(loessmodel, t)
+    r = x - xtrend
+    return t, x, xtrend, r
+end
+
+function kyr_xticks(tticks_yr)
+    tticks_kyr = [&quot;$t&quot; for t in Int.(tticks_yr ./ 1e3)]
+    return (tticks_yr, tticks_kyr)
+end
+
+function plot_do(traw, xraw, tfilt, xfilt, t, r, t_transitions, xlims, xticks)
+    fig = Figure(size = (1600, 1200), fontsize = 24)
+
+    # Original timeseries with transition marked by vertical lines
+    ax1 = Axis(fig[1, 1], xlabel = L&quot;Time (kyr) $\,$&quot;, ylabel = L&quot;$\delta^{18}$O (permil)&quot;,
+        xaxisposition = :top, xticks = xticks)
+    lines!(ax1, traw, xraw, color = (:gray70, 0.5))
+    lines!(ax1, tfilt, xfilt, color = :gray10, linewidth = 3)
+    vlines!(ax1, t_transitions, color = Cycled(1), linewidth = 3)
+
+    # Residual timeseries
+    ax2 = Axis(fig[2, 1], ylabel = L&quot;Residual $\,$&quot;, xticks = xticks,
+        xticksvisible = false, xticklabelsvisible = false)
+    lines!(ax2, t, r, color = :gray50, linewidth = 1)
+
+    # Axes for variance and AC1 timeseries
+    ax3 = Axis(fig[3, 1], ylabel = L&quot;Variance $\,$&quot;, xticks = xticks,
+        xticksvisible = false, xticklabelsvisible = false)
+    ax4 = Axis(fig[4, 1], xlabel = L&quot;Time (kyr) $\,$&quot;, ylabel = L&quot;Lag-1 autocor. $\,$&quot;,
+        xticks = xticks)
+
+    axs = [ax1, ax2, ax3, ax4]
+    [xlims!(ax, xlims) for ax in axs]
+    ylims!(axs[1], (-48, -34))
+    rowgap!(fig.layout, 10)
+    return fig, axs
+end
+
+xlims = (-60e3, -10e3)
+xticks = kyr_xticks(-60e3:5e3:5e3)
+t_rasmussen = -[-60000, 59440, 58280, 55800, 54220, 49280, 46860, 43340, 41460, 40160,
+                38220, 35480, 33740, 32500, 28900, 27780, 23340, 14692, 11703]
+tloess, _, xloess, rloess = loess_filter(t3, x3)    # loess-filtered signal for visualization
+fig, axs = plot_do(t3, x3, tloess, xloess, t, r, t_rasmussen, xlims, xticks)
+fig</code></pre><img src="ba06f092.png" alt="Example block output"/><h2 id="Hindcast-on-NGRIP-data"><a class="docs-heading-anchor" href="#Hindcast-on-NGRIP-data">Hindcast on NGRIP data</a><a id="Hindcast-on-NGRIP-data-1"></a><a class="docs-heading-anchor-permalink" href="#Hindcast-on-NGRIP-data" title="Permalink"></a></h2><p>As one can see... there is not much to see so far. Residuals are impossible to simply eye-ball and we therefore use TransitionsInTimeseries.jl to study the evolution, measured by the ridge-regression slope of the residual&#39;s variance and lag-1 autocorrelation (AC1) over time. In many examples of the literature, including (<a href="../../refs/#boers-early-warning-2018">Boers, 2018</a>), the CSD analysis is performed over segments (sometimes only one) of the timeseries, such that a significance value is obtained for each segment. By using <code>SegmentedWindowConfig</code>, dealing with segments can be easily done in TransitionsInTimeseries.jl and is demonstrated here:</p><pre><code class="language-julia hljs">using TransitionsInTimeseries, StatsBase
+using Random: Xoshiro
+
+ac1(x) = sum(autocor(x, [1]))   # AC1 from StatsBase
+indicators = (var, ac1)
+change_metrics = (RidgeRegressionSlope(), RidgeRegressionSlope())
+tseg_start = t_rasmussen[1:end-1] .+ 200
+tseg_end = t_rasmussen[2:end] .- 200
+config = SegmentedWindowConfig(indicators, change_metrics,
+    tseg_start, tseg_end; whichtime = last, width_ind = Int(200÷dt),
+    min_width_cha = 100)        # require &gt;=100 data points to estimate change metric
+results = estimate_changes(config, r, t)
+signif = SurrogatesSignificance(n = 1000, tail = [:right, :right], rng = Xoshiro(1995))
+flags = significant_transitions(results, signif)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">18×2 BitMatrix:
+ 0  0
+ 0  0
+ 0  0
+ 0  0
+ 1  0
+ 1  1
+ 1  1
+ 1  1
+ 0  0
+ 1  0
+ 1  0
+ 0  0
+ 0  0
+ 1  0
+ 0  0
+ 0  0
+ 1  0
+ 1  0</code></pre><p>That&#39;s it! We can now visualise our results with a generic function that we will re-use later:</p><pre><code class="language-julia hljs">function plot_segment_analysis!(axs, results, signif)
+    (; t_indicator, x_indicator) = results
+    for k in eachindex(t_indicator)             # loop over the segments
+        for i in axes(signif.pvalues, 2)        # loop over the indicators
+            if !isnan(signif.pvalues[k, i])     # plot if segment long enough
+                # Plot indicator timeseries and its linear regression
+                ti, xi = t_indicator[k], x_indicator[k][:, i]
+                lines!(axs[i+2], ti, xi, color = Cycled(1))
+                m, p = ridgematrix(ti, 0.0) * xi
+                if signif.pvalues[k, i] &lt; 0.05
+                    lines!(axs[i+2], ti, m .* ti .+ p, color = :gray5, linewidth = 3)
+                else
+                    lines!(axs[i+2], ti, m .* ti .+ p, color = :gray60, linewidth = 3)
+                end
+            end
+        end
+    end
+end
+plot_segment_analysis!(axs, results, signif)
+fig</code></pre><img src="ecdc7c2d.png" alt="Example block output"/><p>In (<a href="../../refs/#boers-early-warning-2018">Boers, 2018</a>), 13/16 and 7/16 true positives are respectively found for the variance and AC1, with 16 referring to the total number of transitions. The timeseries actually includes 18 transition but, in (<a href="../../refs/#boers-early-warning-2018">Boers, 2018</a>), some segments are considered too small to be analysed. In contrast, we here respectively find 9/16 true positives for the variance and 3/16 for AC1. We can track down the discrepancies to be in the surrogate testing, since the indicator timeseries computed here are almost exactly similar to those of (<a href="../../refs/#boers-early-warning-2018">Boers, 2018</a>). This mismatch points out that packages like TransitionsInTimeseries.jl are desirable for research to be reproducible, especially since CSD is gaining attention - not only within the scientific community but also in popular media.</p><h2 id="CSD:-only-a-necessary-condition,-only-in-some-cases"><a class="docs-heading-anchor" href="#CSD:-only-a-necessary-condition,-only-in-some-cases">CSD: only a necessary condition, only in some cases</a><a id="CSD:-only-a-necessary-condition,-only-in-some-cases-1"></a><a class="docs-heading-anchor-permalink" href="#CSD:-only-a-necessary-condition,-only-in-some-cases" title="Permalink"></a></h2><p>For codimension-1 systems, approaching a fold, Hopf or transcritical bifurcation implies a widening of the potential <span>$U$</span>, which defines the deterministic term <span>$f = -∇U$</span> of the SDE&#39;s right-hand-side. In the presence of noise, this leads to CSD, which is therefore a <strong>necessary condition</strong> for crossing one of these bifurcations - although it is not always assessable by analysing the timeseries due to practical limitations (e.g. sparse data subject to large measurement noise). It is nonetheless not given that DO-events, as many other real-life applications, can be seen as a codimension-1 fold, Hopf or transcritical bifurcations. Besides this, we emphasise that CSD is <strong>not a sufficient condition</strong> for assessing a transition being ahead in near future, since a resilience loss can happen without actually crossing any bifurcation. This can be illustrated on the present example by performing the same analysis only until few hundred years before the transition:</p><pre><code class="language-julia hljs">tseg_end = t_rasmussen[2:end] .- 700    # stop analysis 500 years earlier than before
+config = SegmentedWindowConfig(indicators, change_metrics,
+    tseg_start, tseg_end, whichtime = last, width_ind = Int(200÷dt),
+    min_width_cha = 100)
+results = estimate_changes(config, r, t)
+signif = SurrogatesSignificance(n = 1000, tail = [:right, :right], rng = Xoshiro(1995))
+flags = significant_transitions(results, signif)
+fig, axs = plot_do(t3, x3, tloess, xloess, t, r, t_rasmussen, xlims, xticks)
+plot_segment_analysis!(axs, results, signif)
+fig</code></pre><img src="3f28f250.png" alt="Example block output"/><p>For the variance and AC1, we here respectively find 6 and 3 positives, although the transitions are still far ahead. This shows that what CSD captures is a potential widening induced by a shift of the forcing parameter rather than the actual transition. We therefore believe, as already suggested in some studies, that &quot;resilience-loss indicators&quot; is a more accurate name than &quot;early-warning signals&quot; when using CSD.</p><p>We draw attention upon the fact that the <span>$\delta^{18}O$</span> timeseries is noisy and sparsely re-sampled. Furthermore, interpolating over time introduces a potential bias in the statistics, even if performed on a coarse grid. The NGRIP data therefore represents an example that should be handled with care - as many others where CSD analysis has been applied on transitions in the field of geoscience. To contrast with this, we propose to perform the same analysis on synthethic DO data, obtained from an Earth Model of Intermediate Complexity (EMIC).</p><div class="admonition is-warning"><header class="admonition-header">Degrees of freedom</header><div class="admonition-body"><p>These sources of error come along the usual problem of arbitrarily choosing (1) a filtering method, (2) windowing parameters and (3) appropriate metrics (for instance when the forcing noise is suspected to be correlated). This leads to a large number of degrees of freedom (DoF). Although sensible guesses are possible here, checking that results are robust w.r.t. the DoF should be a standard practice.</p></div></div><div class="admonition is-info"><header class="admonition-header">Future improvement</header><div class="admonition-body"><p>Supporting the computations for uneven timeseries is a planned improvement of TransitionsInTimeseries.jl. This will avoid the need of regridding data on coarse grids and will prevent from introducing any bias.</p></div></div><h2 id="Hindcasting-simulated-DO-events"><a class="docs-heading-anchor" href="#Hindcasting-simulated-DO-events">Hindcasting simulated DO-events</a><a id="Hindcasting-simulated-DO-events-1"></a><a class="docs-heading-anchor-permalink" href="#Hindcasting-simulated-DO-events" title="Permalink"></a></h2><p>In CLIMBER-X, the EMIC described in (<a href="../../refs/#willeit-earth-2022">Willeit <em>et al.</em>, 2022</a>), DO-like events can be triggered by forcing the North Atlantic with a (white noise) freshwater input. Simulated DO-like events present the big advantage of being evenly sampled in time and free of measurement noise. We run this analysis over two exemplary simulation outputs:</p><pre><code class="language-julia hljs">t_transitions = [[1, 1850, 2970, 3970, 5070, 5810, 7050, 8050],
+                 [1, 3500, 4370, 5790, 7200, 8140]]
+t_lb = [[300, 500, 300, 600, 300, 500, 500], [1800, 500, 1000, 900, 500]]
+tseg_start = [t_transitions[1][1:end-1] + t_lb[1], t_transitions[2][1:end-1] + t_lb[2]]
+tseg_end = [t_transitions[1][2:end] .- 50, t_transitions[2][2:end] .- 50]
+
+figvec = Figure[]
+
+for j in 1:2
+    # Download the data and perform loess filtering on it
+    tmp = Base.download(&quot;https://raw.githubusercontent.com/JuliaDynamics/JuliaDynamics/&quot; *
+        &quot;master/timeseries/climberx-do$(j)-omaxa.csv&quot;)
+    data = readdlm(tmp)
+    tcx, xcx = data[1, 1000:end], data[2, 1000:end]
+    t, x, xtrend, r = loess_filter(tcx, xcx, span = 0.02)
+
+    # Initialize figure
+    xlims = (0, last(tcx))
+    xticks = kyr_xticks(xlims[1]:1e3:xlims[2])
+    fig, axs = plot_do(tcx, xcx,  t, xtrend, t, r, t_transitions[j], extrema(t), xticks)
+    ylims!(axs[1], (5, 40))
+    axs[1].ylabel = L&quot;Max. Atlantic overturning (Sv) $\,$&quot;
+
+    # Run sliding analysis and update figure with results
+    dt = mean(diff(tcx))
+    config = SegmentedWindowConfig(
+        indicators, change_metrics, tseg_start[j], tseg_end[j],
+        whichtime = last, width_ind = Int(200÷dt), min_width_cha = 100)
+    results = estimate_changes(config, r, t)
+    signif = SurrogatesSignificance(n = 1_000, tail = [:right, :right], rng = Xoshiro(1995))
+    flags = significant_transitions(results, signif)
+
+    plot_segment_analysis!(axs, results, signif)
+    vlines!(axs[1], t_transitions[j], color = Cycled(1), linewidth = 3)
+    push!(figvec, fig)
+end
+figvec[1]</code></pre><img src="7494cf2f.png" alt="Example block output"/><p>It here appears that not all transitions are preceeded by a significant increase of variance and AC1, even in the case of clean and evenly sampled time series. Let&#39;s check another case:</p><pre><code class="language-julia hljs">figvec[2]</code></pre><img src="3835a9d2.png" alt="Example block output"/><p>Same here! Although CLIMBER-X does not represent real DO-events, the above-performed analysis might be hinting at the fact that not all DO transitions can be forecasted with CSD. Nonetheless, performing a CSD analysis can inform on the evolution of a system&#39;s resilience.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../ks_paleojump/">« Kolmogorov-Smirnov test for detecting transitions in paleoclimate timeseries</a><a class="docs-footer-nextpage" href="../../api/">API »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.4.1 on <span class="colophon-date" title="Wednesday 22 May 2024 16:05">Wednesday 22 May 2024</span>. Using Julia version 1.10.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

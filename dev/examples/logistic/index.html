@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Permutation entropy for dynamic regime changes · TransitionsInTimeseries.jl</title><meta name="title" content="Permutation entropy for dynamic regime changes · TransitionsInTimeseries.jl"/><meta property="og:title" content="Permutation entropy for dynamic regime changes · TransitionsInTimeseries.jl"/><meta property="twitter:title" content="Permutation entropy for dynamic regime changes · TransitionsInTimeseries.jl"/><meta name="description" content="Documentation for TransitionsInTimeseries.jl."/><meta property="og:description" content="Documentation for TransitionsInTimeseries.jl."/><meta property="twitter:description" content="Documentation for TransitionsInTimeseries.jl."/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="https://fonts.googleapis.com/css?family=Montserrat|Source+Code+Pro&amp;display=swap" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">TransitionsInTimeseries.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">TransitionsInTimeseries.jl</a></li><li><a class="tocitem" href="../../tutorial/">Tutorial</a></li><li><span class="tocitem">Examples</span><ul><li class="is-active"><a class="tocitem" href>Permutation entropy for dynamic regime changes</a><ul class="internal"><li><a class="tocitem" href="#Logistic-map-timeseries"><span>Logistic map timeseries</span></a></li><li><a class="tocitem" href="#Using-a-simpler-change-metric"><span>Using a simpler change metric</span></a></li><li><a class="tocitem" href="#Significance-via-random-Fourier-surrogates"><span>Significance via random Fourier surrogates</span></a></li><li><a class="tocitem" href="#Different-surrogates"><span>Different surrogates</span></a></li><li><a class="tocitem" href="#Simpler-Significance"><span>Simpler Significance</span></a></li></ul></li><li><a class="tocitem" href="../ks_paleojump/">Kolmogorov-Smirnov test for detecting transitions in paleoclimate timeseries</a></li><li><a class="tocitem" href="../do-events/">Dansgaard-Oescher events and Critical Slowing Down</a></li></ul></li><li><a class="tocitem" href="../../api/">API</a></li><li><a class="tocitem" href="../../refs/">References</a></li><li><a class="tocitem" href="../../devdocs/">Developer&#39;s documentation</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Examples</a></li><li class="is-active"><a href>Permutation entropy for dynamic regime changes</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Permutation entropy for dynamic regime changes</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/JuliaDynamics/TransitionsInTimeseries.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/JuliaDynamics/TransitionsInTimeseries.jl/blob/main/docs/src/examples/logistic.jl" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Permutation-entropy-for-dynamic-regime-changes"><a class="docs-heading-anchor" href="#Permutation-entropy-for-dynamic-regime-changes">Permutation entropy for dynamic regime changes</a><a id="Permutation-entropy-for-dynamic-regime-changes-1"></a><a class="docs-heading-anchor-permalink" href="#Permutation-entropy-for-dynamic-regime-changes" title="Permalink"></a></h1><p>Permutation entropy is used frequently to detect a transition between one dynamic regime to another. It is useful when the mean and std. of the timeseries values are very similar between the two regimes, which would mean that common distribution-based indicators, or common critical-slowing-down based indicators, would fail.</p><p>This example will also explore different ways to test for significance that are arguably better suitable in such an application than the <a href="../../tutorial/#Tutorial">Tutorial</a>&#39;s default of significance via random Fourier surrogates.</p><h2 id="Logistic-map-timeseries"><a class="docs-heading-anchor" href="#Logistic-map-timeseries">Logistic map timeseries</a><a id="Logistic-map-timeseries-1"></a><a class="docs-heading-anchor-permalink" href="#Logistic-map-timeseries" title="Permalink"></a></h2><p>A simple example of this is transitions from periodic to weakly chaotic to chaotic motion in the logistic map. First, let&#39;s generate a timeseries of the logistic map</p><pre><code class="language-julia hljs">using DynamicalSystemsBase
+using CairoMakie
+
+# time-dependent logistic map, so that the `r` parameter increases with time
+r1 = 3.83
+r2 = 3.86
+N = 2000
+rs = range(r1, r2; length = N)
+
+function logistic_drifting_rule(u, rs, n)
+    r = rs[n+1] # time is `n`, starting from 0
+    return SVector(r*u[1]*(1 - u[1]))
+end
+
+ds = DeterministicIteratedMap(logistic_drifting_rule, [0.5], rs)
+x = trajectory(ds, N-1)[1][:, 1]</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">2000-element Vector{Float64}:
+ 0.5
+ 0.9575
+ 0.15585767321160574
+ 0.5039019545917718
+ 0.9574529422362281
+ 0.15602441103002537
+ 0.5043473227583317
+ 0.9574501255597653
+ 0.1560361152301728
+ 0.5043840906474082
+ ⋮
+ 0.4253904015445437
+ 0.9434836074964187
+ 0.20581843730311683
+ 0.6309301050251992
+ 0.8988117342940414
+ 0.3510584545931264
+ 0.8793611090928393
+ 0.40948549063776396
+ 0.9333718681550522</code></pre><p>Plot it, using as time the parameter value (they coincide)</p><pre><code class="language-julia hljs">fig, ax = lines(rs, x; linewidth = 0.5)
+ax.xlabel = &quot;r (time)&quot;
+ax.ylabel = &quot;x&quot;
+fig</code></pre><img src="79a77bed.png" alt="Example block output"/><p>In this example there is a rather obvious transition to strongly chaotic motion at r ≈ 3.855. However, there is also a subtle transition to weak chaos at r ≈ 3.847. This transition is barely visible in the timeseries, and in fact many of the timeseries statistical properties remain identical.</p><h2 id="Using-a-simpler-change-metric"><a class="docs-heading-anchor" href="#Using-a-simpler-change-metric">Using a simpler change metric</a><a id="Using-a-simpler-change-metric-1"></a><a class="docs-heading-anchor-permalink" href="#Using-a-simpler-change-metric" title="Permalink"></a></h2><p>Now, let&#39;s compute various indicators and their changes, focusing on the permutation entropy as an indicator. We use order 4 here, because we know that to detect changes in a period <code>m</code> we would need an order ≥ <code>m+1</code> permutation entropy.</p><pre><code class="language-julia hljs">using TransitionsInTimeseries, ComplexityMeasures
+
+function permutation_entropy(m)
+    est = SymbolicPermutation(; m) # order 3
+    indicator = x -&gt; entropy_normalized(est, x)
+    return indicator
+end
+
+indicators = (var, ar1_whitenoise, permutation_entropy(4))
+indistrings = (&quot;var&quot;, &quot;ar1&quot;, &quot;pe&quot;)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">(&quot;var&quot;, &quot;ar1&quot;, &quot;pe&quot;)</code></pre><p>In this example there is no critical slowing down; instead, there is a sharp transition between periodic and chaotic motion. Hence, we shouldn&#39;t be using any trend-based change metrics. Instead, we will use the most basic change metric, <a href="../../api/#TransitionsInTimeseries.difference_of_means"><code>difference_of_means</code></a>. With this metric it also makes most sense to use as stride half the window width</p><pre><code class="language-julia hljs">metric = (difference_of_means, difference_of_means, difference_of_means)
+
+width_ind = N÷100
+width_cha = 20
+stride_cha = 10
+
+config = SlidingWindowConfig(indicators, metric;
+    width_ind, width_cha, stride_cha,
+)
+
+results = estimate_changes(config, x, rs)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">SlidingWindowResults
+ input timeseries:              2000-element Vector{Float64}
+ indicators:                    [:var, :ar1_whitenoise, Symbol(&quot;#1&quot;)]
+ indicator (window, stride):    (20, 1)
+ change metrics:                [:difference_of_means, :difference_of_means, :difference_of_means]
+ change metric (window, stride): (20, 10)
+</code></pre><p>Let&#39;s now plot the change metrics of the indicators</p><pre><code class="language-julia hljs">function plot_change_metrics()
+    fig, ax = lines(rs, x; axis = (ylabel = &quot;input&quot;,), figure = (size = (600, 600),))
+    hidexdecorations!(ax; grid = false)
+    # plot all change metrics
+    for (i, c) in enumerate(eachcol(results.x_change))
+        ax, = scatterlines(fig[i+1, 1], results.t_change, c;
+            axis = (ylabel = indistrings[i],), label = &quot;input&quot;
+        )
+        if i &lt; 3
+            hidexdecorations!(ax; grid = false)
+        else
+            ax.xlabel = &quot;r (time)&quot;
+        end
+    end
+    return fig
+end
+
+fig = plot_change_metrics()</code></pre><img src="7dd3de76.png" alt="Example block output"/><p>We already see the interesting results we expect: the permutation entropy shows a striking change as we go from periodic to weakly chaotic motion at r ≈ 3.847. (Remember: the plotted quantity is how much the indicator changes within a time window. High values mean large changes.)</p><p>Due to its construction, permutation entropy will have a spike for periodic data at the start of the timeseries, so we can safely ignore the spike at r ≈ 3.83.</p><h2 id="Significance-via-random-Fourier-surrogates"><a class="docs-heading-anchor" href="#Significance-via-random-Fourier-surrogates">Significance via random Fourier surrogates</a><a id="Significance-via-random-Fourier-surrogates-1"></a><a class="docs-heading-anchor-permalink" href="#Significance-via-random-Fourier-surrogates" title="Permalink"></a></h2><p>One way to test for significance would be via the standard way as in the <a href="../../tutorial/#Tutorial">Tutorial</a>, utilizing surrogate timeseries and <a href="../../api/#TransitionsInTimeseries.SurrogatesSignificance"><code>SurrogatesSignificance</code></a>.</p><p>Let&#39;s do it here for an example, but, we have to be <strong>careful</strong>. It is crucial that for permutation entropy we use <code>:right</code> as the <code>tail</code>, because it is expected that the surrogates will have higher differences in the permutation entropy timeseries (because, if there is no dynamical change, the permutation entropy will stay the same, while in the surrogates there are always random fluctuations!</p><pre><code class="language-julia hljs">surromethod = RandomFourier()
+
+# Define a function because we will re-use later
+using Random: Xoshiro
+function overplot_surrogate_significance!(fig, surromethod, color = &quot;black&quot;)
+
+    signif = SurrogatesSignificance(;
+        n = 1000, tail = [:both, :both, :right], surromethod, rng = Xoshiro(42),
+    )
+    flags = significant_transitions(results, signif)
+
+    # and also plot the flags with same color
+    for (i, indicator) in enumerate(indicators)
+        # To make things visually clear, we will also plot some example surrogate
+        # timeseries for each indicator and change metric pair
+        for _ in 1:10
+            s = TimeseriesSurrogates.surrogate(x, surromethod)
+            p = windowmap(indicator, s; width = width_ind)
+            q = windowmap(metric[i], p; width = width_cha, stride = stride_cha)
+            lines!(fig[i+1, 1], results.t_change, q;  color = (color, 0.2), linewidth = 1)
+        end
+        # Plot the flags as vertical dashed lines
+        vlines!(fig[i+1, 1], results.t_change[flags[:, i]];
+            color = color, linestyle = :dash, linewidth = 3
+        )
+    end
+    # add a title to the figure with how we estimate significance
+    content(fig[1, 1]).title = &quot;surrogates: &quot;*string(nameof(typeof(surromethod)))
+end
+
+surromethod = RandomFourier()
+overplot_surrogate_significance!(fig, surromethod)
+
+fig</code></pre><img src="5480b98f.png" alt="Example block output"/><h2 id="Different-surrogates"><a class="docs-heading-anchor" href="#Different-surrogates">Different surrogates</a><a id="Different-surrogates-1"></a><a class="docs-heading-anchor-permalink" href="#Different-surrogates" title="Permalink"></a></h2><p>Random Fourier surrogates perserve the power spectrum of the timeseries, but the power spectrum is a property integrated over the whole timeseries. It doesn&#39;t contain any information highlighting the <em>local</em> dynamics or information that preserves the local changes of dynamical behavior.</p><p>A surrogate type that does a better job in preserving local sharp changes in the timeseries (and hence provides <strong>stricter</strong> surrogate-based significance) is for example <code>RelativePartialRandomization</code>.</p><p>A much better alternative is to use block-shuffled surrogates, which preserve the short term local temporal correlation in the timeseries and hence also preserve local short term sharp changes in the dynamic behavior.</p><pre><code class="language-julia hljs">surromethod = RelativePartialRandomization(0.25)
+fig = plot_change_metrics()
+overplot_surrogate_significance!(fig, surromethod, &quot;gray&quot;)
+fig</code></pre><img src="6e846ae2.png" alt="Example block output"/><p>Our results have improved. In the permutation entropy, we see only two transitions detected as significant, which is correct: only two real dynamical transitions exist in the data. In the other two indicators we also see fewer transitions, but as we have already discussed, no results with the other indicators should be taken into meaningful consideration, as these indicators are simply inappropriate for what we are looking for here.</p><h2 id="Simpler-Significance"><a class="docs-heading-anchor" href="#Simpler-Significance">Simpler Significance</a><a id="Simpler-Significance-1"></a><a class="docs-heading-anchor-permalink" href="#Simpler-Significance" title="Permalink"></a></h2><p>Arguably, exactly because we are using the <a href="../../api/#TransitionsInTimeseries.difference_of_means"><code>difference_of_means</code></a> as a change metric, we may want to be less strict and more simple with our tests for significance. Instead of using <a href="../../api/#TransitionsInTimeseries.SurrogatesSignificance"><code>SurrogatesSignificance</code></a> we may use the simpler and much faster <a href="../../api/#TransitionsInTimeseries.SigmaSignificance"><code>SigmaSignificance</code></a>, which simply claims significant time points whenever a change metric exceeds some pre-defined factor of its timeseries standard deviation.</p><pre><code class="language-julia hljs">fig = plot_change_metrics()
+flags = significant_transitions(results, SigmaSignificance(factor = 5.0))
+
+# Plot the flags
+for (i, indicator) in enumerate(indicators)
+    vlines!(fig[i+1, 1], results.t_change[flags[:, i]];
+        color = Cycled(3), linestyle = :dash, linewidth = 3
+    )
+end
+content(fig[1, 1]).title = &quot;significance from std&quot;
+fig</code></pre><img src="32bfb484.png" alt="Example block output"/></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../tutorial/">« Tutorial</a><a class="docs-footer-nextpage" href="../ks_paleojump/">Kolmogorov-Smirnov test for detecting transitions in paleoclimate timeseries »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.4.1 on <span class="colophon-date" title="Friday 24 May 2024 09:09">Friday 24 May 2024</span>. Using Julia version 1.10.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
