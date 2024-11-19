@@ -43,7 +43,7 @@ fig
 # to weak chaos at r ≈ 3.847. This transition is barely visible in the
 # timeseries, and in fact many of the timeseries statistical properties remain identical.
 
-# ## Using a simpler change metric
+# ## Using a simple change metric
 
 # Now, let's compute various indicators and their changes,
 # focusing on the permutation entropy as an indicator. We use
